@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import EventDetails from "./pages/EventDetails";
 
@@ -13,7 +14,10 @@ function App() {
 
   return (
     <div>
+      <Navbar onNavigate={setPage} />
+
       {page === "home" && <Home onSelectEvent={handleSelect} />}
+
       {page === "details" && (
         <EventDetails
           evento={selectedEvent}

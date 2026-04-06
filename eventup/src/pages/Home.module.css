@@ -1,28 +1,28 @@
 .container {
-  padding: 15px;
+  padding: 10px;
 }
 
 .title {
-  font-size: 22px;
+  font-size: 20px;
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 /* Tablet */
 @media (min-width: 768px) {
   .container {
-    padding: 25px;
+    padding: 20px;
   }
 
   .title {
-    font-size: 28px;
+    font-size: 26px;
   }
 }
 
 /* Desktop */
 @media (min-width: 1024px) {
   .container {
-    max-width: 800px;
+    max-width: 700px;
     margin: 0 auto;
   }
 }
