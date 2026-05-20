@@ -1,50 +1,54 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EventCard from "./EventCard";
 import styles from "./EventList.module.css";
 
 export default function EventList({ onSelectEvent }) {
- const eventos = [
-  {
-    id: 1,
-    titulo: "Workshop React",
-    data: "2026-04-10",
-    local: "Toronto",
-    imagem: "https://images.unsplash.com/photo-1550439062-609e1531270e"
-  },
-  {
-    id: 2,
-    titulo: "Feira Tech",
-    data: "2026-04-15",
-    local: "Vancouver",
-    imagem: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d"
-  },
-  {
-    id: 3,
-    titulo: "Startup Day",
-    data: "2026-04-20",
-    local: "Montreal",
-    imagem: "https://images.unsplash.com/photo-1515168833906-d2a3b82b302a"
-  }
-];
-
   const [loading, setLoading] = useState(true);
   const [lista, setLista] = useState([]);
 
-  if (loading) {
-    setTimeout(() => {
-      setLista(eventos);
-      setLoading(false);
-    }, 1000);
-  }
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const response = await fetch(
+          `https://app.ticketmaster.com/discovery/v2/events.json?city=Toronto&classificationName=music&size=12&apikey=${
+            import.meta.env.VITE_TICKETMASTER_API_KEY
+          }`
+        );
+
+        const data = await response.json();
+
+        const eventos =
+          data?._embedded?.events?.map((event) => ({
+            id: event.id,
+            titulo: event.name,
+            data: event.dates?.start?.localDate,
+            local: event._embedded?.venues?.[0]?.city?.name,
+            imagem:
+              event.images?.[0]?.url ||
+              "https://via.placeholder.com/300",
+          })) || [];
+
+        setLista(eventos);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchEvents();
+  }, []);
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Events</h2>
+      <h2 className={styles.title}>Real Events</h2>
 
-      {loading && <p className={styles.loading}>Carregando...</p>}
+      {loading && (
+        <p className={styles.loading}>Loading...</p>
+      )}
 
       {!loading &&
-        lista.map(evento => (
+        lista.map((evento) => (
           <EventCard
             key={evento.id}
             evento={evento}

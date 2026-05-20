@@ -6,12 +6,27 @@ export default function EventDetails({ evento, onBack }) {
   return (
     <div className={styles.container}>
       <button className={styles.button} onClick={onBack}>
-        Voltar
+        ← Voltar
       </button>
 
+      {evento.imagem && (
+        <img 
+          src={evento.imagem} 
+          alt={evento.titulo}
+          className={styles.image}
+        />
+      )}
+
       <h2 className={styles.title}>{evento.titulo}</h2>
-      <p>Data: {evento.data}</p>
-      <p>Local: {evento.local}</p>
+      
+      <div className={styles.infoContainer}>
+        <p className={styles.infoText}>
+          <span className={styles.infoLabel}>📅 Data:</span> {evento.data}
+        </p>
+        <p className={styles.infoText}>
+          <span className={styles.infoLabel}>📍 Local:</span> {evento.local}
+        </p>
+      </div>
     </div>
   );
 }
