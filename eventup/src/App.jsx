@@ -1,29 +1,47 @@
-import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import Home from "./pages/Home";
 import EventDetails from "./pages/EventDetails";
+import CadastroUsuario from "./pages/CadastroUsuario";
+import LoginUsuario from "./pages/LoginUsuario";
 
 function App() {
-  const [page, setPage] = useState("home");
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
-  function handleSelect(evento) {
-    setSelectedEvent(evento);
-    setPage("details");
-  }
-
   return (
     <div>
-      <Navbar onNavigate={setPage} />
+      <Navbar />
 
-      {page === "home" && <Home onSelectEvent={handleSelect} />}
-
-      {page === "details" && (
-        <EventDetails
-          evento={selectedEvent}
-          onBack={() => setPage("home")}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
         />
-      )}
+
+        <Route
+          path="/event/:id"
+          element={
+            <ProtectedRoute>
+              <EventDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/cadastro"
+          element={<CadastroUsuario />}
+        />
+
+        <Route
+          path="/login"
+          element={<LoginUsuario />}
+        />
+      </Routes>
     </div>
   );
 }
