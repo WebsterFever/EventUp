@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
-function EventCard({ evento }) {
+function EventCard({ evento, onSelect }) {
   return (
-    <StyledLink
-      to={`/event/${evento.id}`}
-      state={{ evento }}
+    <CardButton
+      type="button"
+      onClick={() => onSelect(evento)}
     >
       <Card>
         <Image
@@ -25,14 +24,19 @@ function EventCard({ evento }) {
           </Text>
         </Content>
       </Card>
-    </StyledLink>
+    </CardButton>
   );
 }
 
 export default EventCard;
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
+const CardButton = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
 `;
 
 const Card = styled.div`

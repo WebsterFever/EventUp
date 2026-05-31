@@ -1,12 +1,6 @@
-import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./EventDetails.module.css";
 
-function EventDetails() {
-  const navigate = useNavigate();
-
-  const location = useLocation();
-
-  const evento = location.state?.evento;
+function EventDetails({ evento, onBack }) {
 
   if (!evento) {
     return (
@@ -15,7 +9,8 @@ function EventDetails() {
 
         <button
           className={styles.button}
-          onClick={() => navigate("/")}
+          onClick={onBack}
+          type="button"
         >
           Voltar
         </button>
@@ -27,7 +22,8 @@ function EventDetails() {
     <div className={styles.container}>
       <button
         className={styles.button}
-        onClick={() => navigate("/")}
+        onClick={onBack}
+        type="button"
       >
         ← Voltar
       </button>

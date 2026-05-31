@@ -6,11 +6,6 @@ import {
 } from "firebase/auth";
 
 import {
-  useNavigate,
-  Link,
-} from "react-router-dom";
-
-import {
   FaEnvelope,
   FaLock,
   FaEye,
@@ -25,9 +20,7 @@ import Alert from "../components/Alert";
 
 import eventupBg from "../assets/eventup.png";
 
-function LoginUsuario() {
-  const navigate = useNavigate();
-
+function LoginUsuario({ onLoginSuccess, onRegister }) {
   const [email, setEmail] =
     useState("");
 
@@ -75,7 +68,7 @@ function LoginUsuario() {
       setTipo("SUCESSO");
 
       setTimeout(() => {
-        navigate("/");
+        onLoginSuccess();
       }, 1200);
     } catch (error) {
       let errorMessage =
@@ -211,7 +204,12 @@ function LoginUsuario() {
               </Label>
             </RememberMe>
 
-            <ForgotPassword to="/">
+            <ForgotPassword type="button" onClick={() => {
+              setMensagem(
+                "Funcionalidade de recuperação de senha ainda não implementada"
+              );
+              setTipo("ERRO");
+            }}>
               Esqueceu a senha?
             </ForgotPassword>
           </OptionsRow>
@@ -238,7 +236,7 @@ function LoginUsuario() {
               Não tem uma conta?
             </RegisterText>
 
-            <RegisterLink to="/cadastro">
+            <RegisterLink type="button" onClick={onRegister}>
               Cadastre-se
             </RegisterLink>
           </RegisterSection>
@@ -506,12 +504,17 @@ const Label = styled.span`
   color: #555;
 `;
 
-const ForgotPassword = styled(Link)`
+const ForgotPassword = styled.button`
   font-size: 14px;
 
   color: #7c5cff;
 
   text-decoration: none;
+
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
 
   &:hover {
     text-decoration: underline;
@@ -605,7 +608,7 @@ const RegisterText = styled.span`
   color: #666;
 `;
 
-const RegisterLink = styled(Link)`
+const RegisterLink = styled.button`
   margin-left: 8px;
 
   font-size: 14px;

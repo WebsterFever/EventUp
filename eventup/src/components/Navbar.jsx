@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import styled from "styled-components";
 
 import {
@@ -9,29 +8,17 @@ import {
 
 import { auth } from "../service/firebase";
 
-function Navbar() {
+function Navbar({ user, onNavigate, onLogout }) {
   const [open, setOpen] = useState(false);
 
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      (currentUser) => {
-        setUser(currentUser);
-      }
-    );
-
-    return () => unsubscribe();
-  }, []);
-
-  const handleLogout = async () => {
-    await signOut(auth);
+  const handleNavigation = (target) => {
+    setOpen(false);
+    onNavigate(target);
   };
 
   return (
     <Nav>
-      <Logo to="/">
+      <Logo type="button" onClick={() => handleNavigation("home")}>
         EventUp
       </Logo>
 
@@ -40,24 +27,24 @@ function Navbar() {
       </Burger>
 
       <Menu open={open}>
-        <StyledLink to="/">
+        <NavButton type="button" onClick={() => handleNavigation("home")}>
           Home
-        </StyledLink>
+        </NavButton>
 
         {!user && (
           <>
-            <StyledLink to="/cadastro">
+            <NavButton type="button" onClick={() => handleNavigation("cadastro")}>
               Cadastro
-            </StyledLink>
+            </NavButton>
 
-            <StyledLink to="/login">
+            <NavButton type="button" onClick={() => handleNavigation("login")}>
               Login
-            </StyledLink>
+            </NavButton>
           </>
         )}
 
         {user && (
-          <LogoutButton onClick={handleLogout}>
+          <LogoutButton type="button" onClick={onLogout}>
             Logout
           </LogoutButton>
         )}
@@ -122,7 +109,7 @@ const Menu = styled.div`
   }
 `;
 
-const StyledLink = styled(Link)`
+const NavButton = styled.button`
   padding: 10px;
 
   color: white;
@@ -130,6 +117,10 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 
   font-size: 16px;
+
+  border: none;
+  background: none;
+  cursor: pointer;
 
   &:hover {
     color: #00bcd4;
@@ -154,7 +145,7 @@ const LogoutButton = styled.button`
   }
 `;
 
-const Logo = styled(Link)`
+const Logo = styled.button`
   color: white;
 
   text-decoration: none;

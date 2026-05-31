@@ -1,47 +1,92 @@
-import { Routes, Route } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 import Navbar from "./components/Navbar";
-import ProtectedRoute from "./components/ProtectedRoute";
-
 import Home from "./pages/Home";
 import EventDetails from "./pages/EventDetails";
 import CadastroUsuario from "./pages/CadastroUsuario";
 import LoginUsuario from "./pages/LoginUsuario";
+import { auth } from "./service/firebase";
 
 function App() {
+  const [page, setPage] = useState("login");
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoadingAuth(false);
+
+      if (currentUser && page === "login") {
+        setPage("home");
+      }
+
+      if (!currentUser && page !== "login" && page !== "cadastro") {
+        setPage("login");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [page]);
+
+  const handleSelectEvent = (evento) => {
+    setSelectedEvent(evento);
+    setPage("event");
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    setSelectedEvent(null);
+    setPage("login");
+  };
+
+  const handleLoginSuccess = () => {
+    setPage("home");
+  };
+
+  const handleRegisterSuccess = () => {
+    setPage("login");
+  };
+
+  const handleNavigate = (targetPage) => {
+    setPage(targetPage);
+  };
+
+  const handleBackHome = () => {
+    setPage("home");
+  };
+
+  if (loadingAuth) {
+    return <h2>Carregando...</h2>;
+  }
+
   return (
     <div>
-      <Navbar />
+      <Navbar user={user} onNavigate={handleNavigate} onLogout={handleLogout} />
 
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
+      {page === "home" && user && (
+        <Home onSelectEvent={handleSelectEvent} />
+      )}
 
-        <Route
-          path="/event/:id"
-          element={
-            <ProtectedRoute>
-              <EventDetails />
-            </ProtectedRoute>
-          }
-        />
+      {page === "event" && (
+        <EventDetails evento={selectedEvent} onBack={handleBackHome} />
+      )}
 
-        <Route
-          path="/cadastro"
-          element={<CadastroUsuario />}
+      {page === "login" && (
+        <LoginUsuario
+          onLoginSuccess={handleLoginSuccess}
+          onRegister={() => setPage("cadastro")}
         />
+      )}
 
-        <Route
-          path="/login"
-          element={<LoginUsuario />}
+      {page === "cadastro" && (
+        <CadastroUsuario
+          onRegisterSuccess={handleRegisterSuccess}
+          onLogin={() => setPage("login")}
         />
-      </Routes>
+      )}
     </div>
   );
 }

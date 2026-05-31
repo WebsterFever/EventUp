@@ -14,20 +14,13 @@ import {
   FaUserShield,
 } from "react-icons/fa";
 
-import {
-  Link,
-  useNavigate,
-} from "react-router-dom";
-
 import { auth } from "../service/firebase";
 
 import Alert from "../components/Alert";
 
 import eventupBg from "../assets/eventup.png";
 
-function CadastroUsuario() {
-  const navigate = useNavigate();
-
+function CadastroUsuario({ onRegisterSuccess, onLogin }) {
   const [email, setEmail] =
     useState("");
 
@@ -78,7 +71,7 @@ function CadastroUsuario() {
       setPassword("");
 
       setTimeout(() => {
-        navigate("/login");
+        onRegisterSuccess();
       }, 1200);
     } catch (error) {
       if (
@@ -148,6 +141,7 @@ function CadastroUsuario() {
             </InputIcon>
 
             <Input
+             name="email"
               type="email"
               placeholder="Digite seu email"
               value={email}
@@ -166,6 +160,7 @@ function CadastroUsuario() {
             </InputIcon>
 
             <Input
+              name="password"
               type={
                 showPassword
                   ? "text"
@@ -219,7 +214,7 @@ function CadastroUsuario() {
               Já possui uma conta?
             </LoginText>
 
-            <LoginLink to="/login">
+            <LoginLink type="button" onClick={onLogin}>
               Entrar
             </LoginLink>
           </LoginSection>
@@ -537,7 +532,7 @@ const LoginText = styled.span`
   color: #666;
 `;
 
-const LoginLink = styled(Link)`
+const LoginLink = styled.button`
   margin-left: 8px;
 
   font-size: 14px;
@@ -547,6 +542,11 @@ const LoginLink = styled(Link)`
   color: #7c5cff;
 
   text-decoration: none;
+
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
 
   &:hover {
     text-decoration: underline;
