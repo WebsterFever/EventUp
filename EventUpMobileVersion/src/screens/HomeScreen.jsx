@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {
-  View,
   FlatList,
-  StyleSheet,
-  TouchableOpacity,
   ActivityIndicator,
-  Text,
 } from 'react-native';
 import axios from 'axios';
+import {
+  Box,
+  Text,
+  Pressable,
+  VStack,
+} from 'native-base';
 
 const HomeScreen = ({ navigation }) => {
   const [events, setEvents] = useState([]);
@@ -41,71 +43,52 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const EventCard = ({ event }) => (
-    <TouchableOpacity
-      style={styles.eventCard}
+    <Pressable
       onPress={() => navigation.navigate('EventDetails', { event })}
+      borderRadius="lg"
+      bg="#fff"
+      p={4}
+      mb={3}
+      shadow={1}
+      _pressed={{
+        bg: '#f9f9f9',
+        opacity: 0.7,
+      }}
     >
-      <Text style={styles.eventName}>{event.name}</Text>
-      <Text style={styles.eventDetails}>
-        {event.dates?.start?.localDate || 'Date TBA'}
-      </Text>
-      {event._embedded?.venues && (
-        <Text style={styles.eventDetails}>
-          {event._embedded.venues[0].name}
+      <VStack space={2}>
+        <Text fontSize={16} fontWeight="bold" color="#333">
+          {event.name}
         </Text>
-      )}
-    </TouchableOpacity>
+        <Text fontSize={14} color="#666">
+          {event.dates?.start?.localDate || 'Date TBA'}
+        </Text>
+        {event._embedded?.venues && (
+          <Text fontSize={14} color="#666">
+            {event._embedded.venues[0].name}
+          </Text>
+        )}
+      </VStack>
+    </Pressable>
   );
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <Box flex={1} justifyContent="center" alignItems="center" bg="#f5f5f5">
         <ActivityIndicator size="large" color="#FF6B6B" />
-      </View>
+      </Box>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <Box flex={1} bg="#f5f5f5">
       <FlatList
         data={events}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <EventCard event={item} />}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={{ padding: 12 }}
       />
-    </View>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  listContent: {
-    padding: 12,
-  },
-  eventCard: {
-    backgroundColor: '#fff',
-    padding: 15,
-    marginBottom: 12,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  eventName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  eventDetails: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
-  },
-});
 
 export default HomeScreen;

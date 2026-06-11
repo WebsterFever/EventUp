@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import { auth } from '../service/firebase';
+import {
+  Box,
+  Text,
+  Button,
+  VStack,
+  HStack,
+  Pressable,
+  Avatar,
+} from 'native-base';
 
 const ProfileScreen = () => {
   const [user, setUser] = useState(null);
@@ -24,103 +29,83 @@ const ProfileScreen = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.profileHeader}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
-            {user?.email?.charAt(0).toUpperCase()}
+    <ScrollView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
+      <Box bg="#fff" py={8} px={5} alignItems="center">
+        <Avatar
+          size="2xl"
+          bg="#FF6B6B"
+          alignSelf="center"
+          mb={4}
+          _text={{
+            fontSize: 32,
+            fontWeight: 'bold',
+            color: '#fff',
+          }}
+        >
+          {user?.email?.charAt(0).toUpperCase()}
+        </Avatar>
+
+        <VStack alignItems="center" space={1}>
+          <Text fontSize={20} fontWeight="bold" color="#333">
+            {user?.displayName || 'User'}
           </Text>
-        </View>
-        <View style={styles.userInfo}>
-          <Text style={styles.userName}>{user?.displayName || 'User'}</Text>
-          <Text style={styles.userEmail}>{user?.email}</Text>
-        </View>
-      </View>
+          <Text fontSize={14} color="#666">
+            {user?.email}
+          </Text>
+        </VStack>
+      </Box>
 
-      <View style={styles.section}>
-        <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.menuText}>My Events</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.menuText}>Favorites</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.menuText}>Settings</Text>
-        </TouchableOpacity>
-      </View>
+      <Box bg="#fff" mt={3}>
+        <Pressable
+          borderBottomWidth={1}
+          borderBottomColor="#f0f0f0"
+          px={5}
+          py={4}
+          _pressed={{ bg: '#f5f5f5' }}
+        >
+          <Text fontSize={16} color="#333">
+            My Events
+          </Text>
+        </Pressable>
 
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Logout</Text>
-      </TouchableOpacity>
+        <Pressable
+          borderBottomWidth={1}
+          borderBottomColor="#f0f0f0"
+          px={5}
+          py={4}
+          _pressed={{ bg: '#f5f5f5' }}
+        >
+          <Text fontSize={16} color="#333">
+            Favorites
+          </Text>
+        </Pressable>
+
+        <Pressable
+          px={5}
+          py={4}
+          _pressed={{ bg: '#f5f5f5' }}
+        >
+          <Text fontSize={16} color="#333">
+            Settings
+          </Text>
+        </Pressable>
+      </Box>
+
+      <Button
+        bg="#FF6B6B"
+        mt={5}
+        mx={5}
+        py={4}
+        borderRadius="md"
+        _pressed={{ bg: '#FF5252' }}
+        onPress={handleLogout}
+      >
+        <Text color="#fff" fontSize={16} fontWeight="bold">
+          Logout
+        </Text>
+      </Button>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  profileHeader: {
-    backgroundColor: '#fff',
-    paddingVertical: 30,
-    alignItems: 'center',
-  },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#FF6B6B',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  avatarText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  userInfo: {
-    alignItems: 'center',
-  },
-  userName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  userEmail: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
-  },
-  section: {
-    backgroundColor: '#fff',
-    marginTop: 12,
-    paddingVertical: 10,
-  },
-  menuItem: {
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  menuText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  logoutButton: {
-    backgroundColor: '#FF6B6B',
-    marginTop: 20,
-    marginHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  logoutButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
 
 export default ProfileScreen;

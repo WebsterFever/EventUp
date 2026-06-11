@@ -126,7 +126,7 @@ function CadastroUsuario({ onRegisterSuccess, onLogin }) {
         </Header>
 
         {mensagem && (
-          <AlertWrapper>
+          <AlertWrapper data-testid="success-alert">  {/* Add this attribute */}
             <Alert
               tipo={tipo}
               mensagem={mensagem}
@@ -141,7 +141,7 @@ function CadastroUsuario({ onRegisterSuccess, onLogin }) {
             </InputIcon>
 
             <Input
-             name="email"
+              name="email"
               type="email"
               placeholder="Digite seu email"
               value={email}

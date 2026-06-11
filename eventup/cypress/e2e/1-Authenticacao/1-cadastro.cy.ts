@@ -1,22 +1,21 @@
-/// <reference types="cypress" />
+﻿/// <reference types="cypress" />
 
-describe('Cadastro de usuário', () => {
-  beforeEach(() => {
-    cy.visit('http://localhost:5173/cadastro');
-  });
+describe("Validação do Cadastro", () => {
+  it("Cadastro com dados válidos", () => {
+    cy.visit("http://localhost:5173");
 
-  it('Deve cadastrar um novo usuário', () => {
-    const email = `teste${Date.now()}@gmail.com`;
+    const email = `${Date.now()}@gmail.com`;
 
     cy.get('input[name="email"]')
       .type(email);
 
     cy.get('input[name="password"]')
-      .type('senha123');
+      .type("123456");
 
-    cy.get('button[type="submit"]')
+    cy.contains("button", "Criar Conta")
       .click();
 
-    cy.url().should('include', '/login');
+    cy.contains("Conta criada com sucesso!")
+      .should("be.visible");
   });
 });

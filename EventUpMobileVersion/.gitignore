@@ -29,3 +29,7 @@ node_modules/
 build/
 .gradle/
 local.properties
+
+# Documentation (Local development only)
+*.md
+!README.md

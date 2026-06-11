@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeBaseProvider, Box } from 'native-base';
 import { auth } from './src/service/firebase';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -116,23 +117,19 @@ export default function App() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF6B6B" />
-      </View>
+      <NativeBaseProvider>
+        <Box flex={1} justifyContent="center" alignItems="center">
+          <ActivityIndicator size="large" color="#FF6B6B" />
+        </Box>
+      </NativeBaseProvider>
     );
   }
 
   return (
-    <NavigationContainer>
-      {user ? <AppTabs /> : <AuthStack />}
-    </NavigationContainer>
+    <NativeBaseProvider>
+      <NavigationContainer>
+        {user ? <AppTabs /> : <AuthStack />}
+      </NavigationContainer>
+    </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

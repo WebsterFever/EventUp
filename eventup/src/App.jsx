@@ -9,10 +9,15 @@ import LoginUsuario from "./pages/LoginUsuario";
 import { auth } from "./service/firebase";
 
 function App() {
-  const [page, setPage] = useState("login");
+  const [page, setPage] = useState("cadastro");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [user, setUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
+
+  // TEMPORARY FOR CYPRESS TESTING
+  useEffect(() => {
+    signOut(auth);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -38,6 +43,8 @@ function App() {
 
   const handleLogout = async () => {
     await signOut(auth);
+    localStorage.clear();
+
     setSelectedEvent(null);
     setPage("login");
   };
@@ -64,14 +71,23 @@ function App() {
 
   return (
     <div>
-      <Navbar user={user} onNavigate={handleNavigate} onLogout={handleLogout} />
+      {user && (
+        <Navbar
+          user={user}
+          onNavigate={handleNavigate}
+          onLogout={handleLogout}
+        />
+      )}
 
       {page === "home" && user && (
         <Home onSelectEvent={handleSelectEvent} />
       )}
 
-      {page === "event" && (
-        <EventDetails evento={selectedEvent} onBack={handleBackHome} />
+      {page === "event" && user && (
+        <EventDetails
+          evento={selectedEvent}
+          onBack={handleBackHome}
+        />
       )}
 
       {page === "login" && (

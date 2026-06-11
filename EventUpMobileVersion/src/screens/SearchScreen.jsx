@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import {
-  View,
-  TextInput,
   FlatList,
-  StyleSheet,
-  TouchableOpacity,
   ActivityIndicator,
-  Text,
 } from 'react-native';
 import axios from 'axios';
+import {
+  Box,
+  Text,
+  Input,
+  Pressable,
+  VStack,
+  SearchIcon,
+} from 'native-base';
 
 const SearchScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -48,96 +51,78 @@ const SearchScreen = ({ navigation }) => {
   };
 
   const EventCard = ({ event }) => (
-    <TouchableOpacity
-      style={styles.eventCard}
+    <Pressable
       onPress={() => navigation.navigate('EventDetails', { event })}
+      borderRadius="lg"
+      bg="#fff"
+      p={4}
+      mb={3}
+      shadow={1}
+      _pressed={{
+        bg: '#f9f9f9',
+        opacity: 0.7,
+      }}
     >
-      <Text style={styles.eventName}>{event.name}</Text>
-      <Text style={styles.eventDetails}>
-        {event.dates?.start?.localDate || 'Date TBA'}
-      </Text>
-      {event._embedded?.venues && (
-        <Text style={styles.eventDetails}>
-          {event._embedded.venues[0].name}
+      <VStack space={2}>
+        <Text fontSize={16} fontWeight="bold" color="#333">
+          {event.name}
         </Text>
-      )}
-    </TouchableOpacity>
+        <Text fontSize={14} color="#666">
+          {event.dates?.start?.localDate || 'Date TBA'}
+        </Text>
+        {event._embedded?.venues && (
+          <Text fontSize={14} color="#666">
+            {event._embedded.venues[0].name}
+          </Text>
+        )}
+      </VStack>
+    </Pressable>
   );
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search events..."
-        value={searchQuery}
-        onChangeText={handleSearch}
-        placeholderTextColor="#999"
-      />
+    <Box flex={1} bg="#f5f5f5">
+      <Box p={3} bg="#fff">
+        <Input
+          placeholder="Search events..."
+          value={searchQuery}
+          onChangeText={handleSearch}
+          InputLeftElement={
+            <SearchIcon ml={2} color="#999" />
+          }
+          borderRadius="md"
+          py={3}
+          px={4}
+          fontSize={16}
+          _focus={{
+            borderColor: '#FF6B6B',
+            backgroundColor: '#fff',
+          }}
+        />
+      </Box>
 
-      {loading && <ActivityIndicator size="large" color="#FF6B6B" />}
+      {loading && (
+        <Box flex={1} justifyContent="center" alignItems="center">
+          <ActivityIndicator size="large" color="#FF6B6B" />
+        </Box>
+      )}
 
       <FlatList
         data={events}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <EventCard event={item} />}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={{ padding: 12 }}
         ListEmptyComponent={
           !loading && searchQuery.length > 0 ? (
-            <Text style={styles.noResults}>No events found</Text>
+            <Box justifyContent="center" alignItems="center" mt={8}>
+              <Text fontSize={16} color="#999">
+                No events found
+              </Text>
+            </Box>
           ) : null
         }
       />
-    </View>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  searchInput: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    marginHorizontal: 12,
-    marginTop: 12,
-    marginBottom: 12,
-    borderRadius: 8,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  listContent: {
-    padding: 12,
-  },
-  eventCard: {
-    backgroundColor: '#fff',
-    padding: 15,
-    marginBottom: 12,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  eventName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  eventDetails: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
-  },
-  noResults: {
-    textAlign: 'center',
-    marginTop: 20,
-    fontSize: 16,
-    color: '#999',
-  },
-});
 
 export default SearchScreen;

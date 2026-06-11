@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
 } from 'react-native';
 import { auth } from '../service/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  Box,
+  VStack,
+  Input,
+  Button,
+  Text,
+  useToast,
+  FormControl,
+  WarningOutlineIcon,
+} from 'native-base';
 
 const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -18,20 +23,24 @@ const SignupScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const toast = useToast();
 
   const handleSignup = async () => {
     if (!email || !password || !confirmPassword) {
       setError('Please fill in all fields');
+      toast.show({ description: 'Please fill in all fields', duration: 3000 });
       return;
     }
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');
+      toast.show({ description: 'Passwords do not match', duration: 3000 });
       return;
     }
 
     if (password.length < 6) {
       setError('Password must be at least 6 characters');
+      toast.show({ description: 'Password must be at least 6 characters', duration: 3000 });
       return;
     }
 
@@ -42,6 +51,7 @@ const SignupScreen = ({ navigation }) => {
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (err) {
       setError(err.message);
+      toast.show({ description: err.message, duration: 3000 });
     } finally {
       setLoading(false);
     }
@@ -50,104 +60,127 @@ const SignupScreen = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
+      style={{ flex: 1 }}
     >
-      <View style={styles.content}>
-        <Text style={styles.title}>EventUp</Text>
-        <Text style={styles.subtitle}>Create Account</Text>
+      <Box flex={1} bg="#fff" justifyContent="center" px={5} py={8}>
+        <VStack space={6} alignItems="center" mb={8}>
+          <Text fontSize={32} fontWeight="bold" color="#FF6B6B">
+            EventUp
+          </Text>
+          <Text fontSize={18} color="#666">
+            Create Account
+          </Text>
+        </VStack>
 
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {error ? (
+          <FormControl isInvalid mb={4}>
+            <Box
+              bg="red.100"
+              borderRadius="md"
+              p={3}
+              flexDirection="row"
+              alignItems="center"
+            >
+              <WarningOutlineIcon color="red.600" mr={2} />
+              <Text color="red.600" flex={1}>
+                {error}
+              </Text>
+            </Box>
+          </FormControl>
+        ) : null}
 
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#999"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          editable={!loading}
-        />
+        <VStack space={4}>
+          <FormControl>
+            <Input
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              isDisabled={loading}
+              borderRadius="md"
+              py={3}
+              px={4}
+              fontSize={16}
+              _focus={{
+                borderColor: '#FF6B6B',
+                backgroundColor: '#fff',
+              }}
+            />
+          </FormControl>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#999"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          editable={!loading}
-        />
+          <FormControl>
+            <Input
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              isDisabled={loading}
+              borderRadius="md"
+              py={3}
+              px={4}
+              fontSize={16}
+              _focus={{
+                borderColor: '#FF6B6B',
+                backgroundColor: '#fff',
+              }}
+            />
+          </FormControl>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          placeholderTextColor="#999"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
-          editable={!loading}
-        />
+          <FormControl>
+            <Input
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry
+              isDisabled={loading}
+              borderRadius="md"
+              py={3}
+              px={4}
+              fontSize={16}
+              _focus={{
+                borderColor: '#FF6B6B',
+                backgroundColor: '#fff',
+              }}
+            />
+          </FormControl>
 
-        <TouchableOpacity
-          style={[styles.signupButton, loading && styles.disabledButton]}
-          onPress={handleSignup}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.signupButtonText}>Sign Up</Text>
-          )}
-        </TouchableOpacity>
+          <Button
+            onPress={handleSignup}
+            isDisabled={loading}
+            bg="#FF6B6B"
+            borderRadius="md"
+            py={3}
+            mt={4}
+            _pressed={{ bg: '#FF5252' }}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text color="#fff" fontWeight="bold" fontSize={16}>
+                Sign Up
+              </Text>
+            )}
+          </Button>
+        </VStack>
 
-        <View style={styles.loginContainer}>
-          <Text style={styles.loginText}>Already have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.loginLink}>Sign In</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+        <Box alignItems="center" mt={6}>
+          <Box flexDirection="row">
+            <Text color="#666">Already have an account? </Text>
+            <Text
+              color="#FF6B6B"
+              fontWeight="bold"
+              onPress={() => navigation.navigate('Login')}
+            >
+              Sign In
+            </Text>
+          </Box>
+        </Box>
+      </Box>
     </KeyboardAvoidingView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#FF6B6B',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 30,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    marginBottom: 15,
-    borderRadius: 8,
-    fontSize: 16,
-  },
-  signupButton: {
-    backgroundColor: '#FF6B6B',
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: 'center',
+export default SignupScreen;
     marginTop: 10,
   },
   disabledButton: {
