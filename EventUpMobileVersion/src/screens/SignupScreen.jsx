@@ -181,35 +181,3 @@ const SignupScreen = ({ navigation }) => {
 };
 
 export default SignupScreen;
-    marginTop: 10,
-  },
-  disabledButton: {
-    opacity: 0.6,
-  },
-  signupButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  errorText: {
-    color: '#FF6B6B',
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  loginContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  loginText: {
-    color: '#666',
-    fontSize: 14,
-  },
-  loginLink: {
-    color: '#FF6B6B',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-});
-
-export default SignupScreen;

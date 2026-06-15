@@ -13,7 +13,6 @@ import {
   Pressable,
   Badge,
 } from 'native-base';
-import { Heart, HeartOutline } from 'lucide-react-native';
 
 const EventDetailsScreen = ({ route }) => {
   const { event } = route.params;
