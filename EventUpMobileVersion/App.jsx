@@ -14,7 +14,7 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import EventDetailsScreen from './src/screens/EventDetailsScreen';
-import HeaderLogoutButton from './src/components/HeaderLogoutButton';
+import HeaderRightActions from './src/components/HeaderRightActions';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,7 +23,7 @@ const headerScreenOptions = {
   headerStyle: { backgroundColor: '#000' },
   headerTitleStyle: { color: '#fff' },
   headerTintColor: '#fff',
-  headerRight: () => <HeaderLogoutButton />,
+  headerRight: () => <HeaderRightActions />,
 };
 
 const HomeStack = () => {
