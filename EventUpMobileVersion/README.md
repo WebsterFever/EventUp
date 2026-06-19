@@ -198,3 +198,9 @@ MIT License
 ## Support
 
 For issues or questions, please refer to the main EventUp repository documentation.
+npx expo start -c  
+tasklist | findstr node
+taskkill /F /PID 25048
+taskkill /F /PID 30024
+
+taskkill /F /IM node.exe

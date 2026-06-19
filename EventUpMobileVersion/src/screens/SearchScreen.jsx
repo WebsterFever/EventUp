@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   FlatList,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import axios from 'axios';
 import {
@@ -10,6 +11,7 @@ import {
   Input,
   Pressable,
   VStack,
+  HStack,
   SearchIcon,
 } from 'native-base';
 
@@ -63,19 +65,27 @@ const SearchScreen = ({ navigation }) => {
         opacity: 0.7,
       }}
     >
-      <VStack space={2}>
-        <Text fontSize={16} fontWeight="bold" color="#333">
-          {event.name}
-        </Text>
-        <Text fontSize={14} color="#666">
-          {event.dates?.start?.localDate || 'Date TBA'}
-        </Text>
-        {event._embedded?.venues && (
-          <Text fontSize={14} color="#666">
-            {event._embedded.venues[0].name}
+      <HStack space={3}>
+        <Image
+          source={{
+            uri: event.images?.[0]?.url || 'https://via.placeholder.com/300',
+          }}
+          style={{ width: 70, height: 70, borderRadius: 8 }}
+        />
+        <VStack space={2} flex={1}>
+          <Text fontSize={16} fontWeight="bold" color="#333">
+            {event.name}
           </Text>
-        )}
-      </VStack>
+          <Text fontSize={14} color="#666">
+            {event.dates?.start?.localDate || 'Date TBA'}
+          </Text>
+          {event._embedded?.venues && (
+            <Text fontSize={14} color="#666">
+              {event._embedded.venues[0].name}
+            </Text>
+          )}
+        </VStack>
+      </HStack>
     </Pressable>
   );
 
