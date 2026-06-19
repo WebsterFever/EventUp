@@ -204,3 +204,11 @@ taskkill /F /PID 25048
 taskkill /F /PID 30024
 
 taskkill /F /IM node.exe
+
+tasklist //FI "IMAGENAME eq node.exe"
+
+Wake the emulator screen (in case it was asleep):
+adb -s emulator-5554 shell input keyevent KEYCODE_WAKEUP
+
+
+curl -X POST http://localhost:8081/reload

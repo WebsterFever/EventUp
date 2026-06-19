@@ -14,20 +14,28 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import EventDetailsScreen from './src/screens/EventDetailsScreen';
+import HeaderLogoutButton from './src/components/HeaderLogoutButton';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+const headerScreenOptions = {
+  headerStyle: { backgroundColor: '#000' },
+  headerTitleStyle: { color: '#fff' },
+  headerTintColor: '#fff',
+  headerRight: () => <HeaderLogoutButton />,
+};
+
 const HomeStack = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="HomeTab" 
+    <Stack.Navigator screenOptions={headerScreenOptions}>
+      <Stack.Screen
+        name="HomeTab"
         component={HomeScreen}
         options={{ headerTitle: 'EventUp' }}
       />
-      <Stack.Screen 
-        name="EventDetails" 
+      <Stack.Screen
+        name="EventDetails"
         component={EventDetailsScreen}
         options={{ headerTitle: 'Event Details' }}
       />
@@ -37,14 +45,14 @@ const HomeStack = () => {
 
 const SearchStack = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="SearchTab" 
+    <Stack.Navigator screenOptions={headerScreenOptions}>
+      <Stack.Screen
+        name="SearchTab"
         component={SearchScreen}
         options={{ headerTitle: 'Search Events' }}
       />
-      <Stack.Screen 
-        name="EventDetails" 
+      <Stack.Screen
+        name="EventDetails"
         component={EventDetailsScreen}
         options={{ headerTitle: 'Event Details' }}
       />
@@ -54,9 +62,9 @@ const SearchStack = () => {
 
 const ProfileStack = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="ProfileTab" 
+    <Stack.Navigator screenOptions={headerScreenOptions}>
+      <Stack.Screen
+        name="ProfileTab"
         component={ProfileScreen}
         options={{ headerTitle: 'Profile' }}
       />
