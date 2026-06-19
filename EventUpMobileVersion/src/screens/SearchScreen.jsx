@@ -31,7 +31,7 @@ const SearchScreen = ({ navigation }) => {
         'https://app.ticketmaster.com/discovery/v2/events.json',
         {
           params: {
-            apikey: 'ykk7K6x0urnbvOFmOHTx5TGaGWcXeD8M',
+            apikey: process.env.EXPO_PUBLIC_TICKETMASTER_API_KEY,
             keyword: query,
             size: 20,
           },
