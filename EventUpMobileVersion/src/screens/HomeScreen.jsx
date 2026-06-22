@@ -4,7 +4,6 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import axios from 'axios';
 import {
   Box,
   Text,
@@ -23,20 +22,14 @@ const HomeScreen = ({ navigation }) => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(
-        'https://app.ticketmaster.com/discovery/v2/events.json',
-        {
-          params: {
-            apikey: process.env.EXPO_PUBLIC_TICKETMASTER_API_KEY,
-            city: 'Toronto',
-            classificationName: 'music',
-            size: 12,
-          },
-        }
+      const response = await fetch(
+        `https://app.ticketmaster.com/discovery/v2/events.json?city=Toronto&classificationName=music&size=12&apikey=${process.env.EXPO_PUBLIC_TICKETMASTER_API_KEY}`
       );
 
-      if (response.data._embedded?.events) {
-        setEvents(response.data._embedded.events);
+      const data = await response.json();
+
+      if (data._embedded?.events) {
+        setEvents(data._embedded.events);
       }
     } catch (error) {
       console.error('Error fetching events:', error);

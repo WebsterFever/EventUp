@@ -4,7 +4,6 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import axios from 'axios';
 import {
   Box,
   Text,
@@ -29,19 +28,14 @@ const SearchScreen = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const response = await axios.get(
-        'https://app.ticketmaster.com/discovery/v2/events.json',
-        {
-          params: {
-            apikey: process.env.EXPO_PUBLIC_TICKETMASTER_API_KEY,
-            keyword: query,
-            size: 20,
-          },
-        }
+      const response = await fetch(
+        `https://app.ticketmaster.com/discovery/v2/events.json?keyword=${encodeURIComponent(query)}&size=20&apikey=${process.env.EXPO_PUBLIC_TICKETMASTER_API_KEY}`
       );
 
-      if (response.data._embedded?.events) {
-        setEvents(response.data._embedded.events);
+      const data = await response.json();
+
+      if (data._embedded?.events) {
+        setEvents(data._embedded.events);
       } else {
         setEvents([]);
       }
