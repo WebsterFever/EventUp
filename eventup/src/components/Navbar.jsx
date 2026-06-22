@@ -1,12 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-import {
-  signOut,
-  onAuthStateChanged,
-} from "firebase/auth";
-
-import { auth } from "../service/firebase";
 
 function Navbar({ user, onNavigate, onLogout }) {
   const [open, setOpen] = useState(false);

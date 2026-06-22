@@ -14,9 +14,10 @@ export default function EventList({ onSelectEvent }) {
             import.meta.env.VITE_TICKETMASTER_API_KEY
           }`
         );
+        
 
         const data = await response.json();
-
+        console.log(data);
         const eventos =
           data?._embedded?.events?.map((event) => ({
             id: event.id,

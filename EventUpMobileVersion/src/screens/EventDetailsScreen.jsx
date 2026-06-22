@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ScrollView,
   Linking,
@@ -10,13 +10,11 @@ import {
   Button,
   VStack,
   HStack,
-  Pressable,
   Badge,
 } from 'native-base';
 
 const EventDetailsScreen = ({ route }) => {
   const { event } = route.params;
-  const [isFavorite, setIsFavorite] = useState(false);
 
   const handleBuyTickets = () => {
     if (event.url) {
@@ -24,14 +22,6 @@ const EventDetailsScreen = ({ route }) => {
     } else {
       Alert.alert('No tickets available', 'Ticket information is not available for this event.');
     }
-  };
-
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    Alert.alert(
-      isFavorite ? 'Removed from favorites' : 'Added to favorites',
-      `${event.name} has been ${isFavorite ? 'removed from' : 'added to'} your favorites.`
-    );
   };
 
   const venue = event._embedded?.venues?.[0];
@@ -112,28 +102,7 @@ const EventDetailsScreen = ({ route }) => {
         </Box>
       )}
 
-      <HStack p={5} space={3}>
-        <Pressable
-          flex={1}
-          borderRadius="md"
-          bg={isFavorite ? '#FFE0E0' : '#f0f0f0'}
-          borderWidth={2}
-          borderColor={isFavorite ? '#FF6B6B' : '#e0e0e0'}
-          py={4}
-          px={3}
-          alignItems="center"
-          onPress={toggleFavorite}
-          _pressed={{ opacity: 0.7 }}
-        >
-          <Text
-            color={isFavorite ? '#FF6B6B' : '#333'}
-            fontWeight="bold"
-            fontSize={14}
-          >
-            {isFavorite ? '❤️ Favorited' : '🤍 Add to Favorites'}
-          </Text>
-        </Pressable>
-
+      <HStack p={5}>
         <Button
           flex={1}
           bg="#FF6B6B"
