@@ -8,7 +8,7 @@ const HeaderRightActions = () => {
 
   return (
     <HStack alignItems="center">
-      <Pressable onPress={() => navigation.navigate('Profile')} px={4} py={2}>
+      <Pressable onPress={() => navigation.navigate('MainTabs', { screen: 'Profile' })} px={4} py={2}>
         <Text color="#fff" fontSize={16}>
           Profile
         </Text>

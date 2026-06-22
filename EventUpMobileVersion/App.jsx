@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 // Screens
 import HomeScreen from './src/screens/HomeScreen';
-import SearchScreen from './src/screens/SearchScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
@@ -26,48 +25,40 @@ const headerScreenOptions = {
   headerRight: () => <HeaderRightActions />,
 };
 
-const HomeStack = () => {
+const AppTabs = () => {
   return (
-    <Stack.Navigator screenOptions={headerScreenOptions}>
-      <Stack.Screen
-        name="HomeTab"
+    <Tab.Navigator
+      screenOptions={{
+        ...headerScreenOptions,
+        tabBarActiveTintColor: '#FF6B6B',
+        tabBarInactiveTintColor: '#999',
+      }}
+    >
+      <Tab.Screen
+        name="Home"
         component={HomeScreen}
-        options={{ headerTitle: 'EventUp' }}
+        options={{
+          headerTitle: 'EventUp',
+          tabBarIcon: ({ color, size }) => <Icon name="home" size={size} color={color} />,
+        }}
       />
-      <Stack.Screen
-        name="EventDetails"
-        component={EventDetailsScreen}
-        options={{ headerTitle: 'Event Details' }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const SearchStack = () => {
-  return (
-    <Stack.Navigator screenOptions={headerScreenOptions}>
-      <Stack.Screen
-        name="SearchTab"
-        component={SearchScreen}
-        options={{ headerTitle: 'Search Events' }}
-      />
-      <Stack.Screen
-        name="EventDetails"
-        component={EventDetailsScreen}
-        options={{ headerTitle: 'Event Details' }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const ProfileStack = () => {
-  return (
-    <Stack.Navigator screenOptions={headerScreenOptions}>
-      <Stack.Screen
-        name="ProfileTab"
+      <Tab.Screen
+        name="Profile"
         component={ProfileScreen}
-        options={{ headerTitle: 'Profile' }}
+        options={{
+          headerTitle: 'Profile',
+          tabBarIcon: ({ color, size }) => <Icon name="person" size={size} color={color} />,
+        }}
       />
+    </Tab.Navigator>
+  );
+};
+
+const MainStack = () => {
+  return (
+    <Stack.Navigator screenOptions={headerScreenOptions}>
+      <Stack.Screen name="MainTabs" component={AppTabs} options={{ headerShown: false }} />
+      <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{ headerTitle: 'Event Details' }} />
     </Stack.Navigator>
   );
 };
@@ -78,35 +69,6 @@ const AuthStack = () => {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
     </Stack.Navigator>
-  );
-};
-
-const AppTabs = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-
-          if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Search') {
-            iconName = focused ? 'search' : 'search-outline';
-          } else if (route.name === 'Profile') {
-            iconName = focused ? 'person' : 'person-outline';
-          }
-
-          return <Icon name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: '#FF6B6B',
-        tabBarInactiveTintColor: '#999',
-        headerShown: false,
-      })}
-    >
-      <Tab.Screen name="Home" component={HomeStack} />
-      <Tab.Screen name="Search" component={SearchStack} />
-      <Tab.Screen name="Profile" component={ProfileStack} />
-    </Tab.Navigator>
   );
 };
 
@@ -136,7 +98,7 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        {user ? <AppTabs /> : <AuthStack />}
+        {user ? <MainStack /> : <AuthStack />}
       </NavigationContainer>
     </NativeBaseProvider>
   );

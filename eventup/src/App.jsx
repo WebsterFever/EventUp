@@ -14,7 +14,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
-  // TEMPORARY FOR CYPRESS TESTING
+  
   useEffect(() => {
     signOut(auth);
   }, []);

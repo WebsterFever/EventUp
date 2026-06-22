@@ -15,6 +15,7 @@ import {
 const HomeScreen = ({ navigation }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     fetchEvents();
@@ -36,6 +37,12 @@ const HomeScreen = ({ navigation }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchEvents();
+    setRefreshing(false);
   };
 
   const EventCard = ({ event }) => (
@@ -90,6 +97,8 @@ const HomeScreen = ({ navigation }) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <EventCard event={item} />}
         contentContainerStyle={{ padding: 12 }}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
       />
     </Box>
   );
